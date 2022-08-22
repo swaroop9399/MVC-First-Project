@@ -1,0 +1,39 @@
+﻿@model IEnumerable<User>
+@{
+    ViewData["Title"] = "All Data";
+}
+
+<div class="row my-5">
+    <div class="col-8 m-auto py-3">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Password</th>
+                    <th scope="col">Register Date</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr id="@item.U_id">
+                        <th scope="row">@item.U_id</th>
+                        <td>@item.Email</td>
+                        <td>@item.Username</td>
+                        <td>@item.Password</td>
+                        <td>@item.RegisterDate</td>
+                        @*<td><a href="EditProcess/@item.U_id" class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i></a></td>
+                        <td><button class="btn btn-danger" id="delete-action" value=@item.U_id><i class="fa-solid fa-trash"></i></button></td>*@
+                    </tr>
+                }
+
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
