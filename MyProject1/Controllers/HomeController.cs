@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MyProject1.Models;
-using System;
 using System.Data.SqlClient;
-using System.Diagnostics;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace MyProject1.Controllers
 {
@@ -53,5 +50,43 @@ namespace MyProject1.Controllers
 
         }
 
+        public RedirectResult DeleteProcess(int id)
+        {
+            Console.WriteLine(id);
+            string Delete = "delete from Users where uid = @id";
+            SqlConnection connection = new SqlConnection(conString);
+            connection.Open();
+            SqlCommand cmd = new SqlCommand(Delete, connection);
+            cmd.Parameters.AddWithValue("@id", id);
+            cmd.ExecuteNonQuery();
+            cmd.Dispose();
+            connection.Close();
+
+            return Redirect("/Home/AllData");
+
+        }
+
+        public RedirectResult EditProcess(int id)
+        {
+            //Console.WriteLine(id);
+            User u = null;
+            DateTime localDate = DateTime.Now;
+            string Edit = "select * from Users where uid = @id";
+            SqlConnection connection = new SqlConnection(conString);
+            connection.Open();
+            SqlCommand cmd = new SqlCommand(Edit, connection);
+            cmd.Parameters.AddWithValue("@id", id);
+            SqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                u = new User((int)reader["uid"], reader["name"].ToString(), reader["email"].ToString(), reader["password"].ToString(), (DateTime)reader["date1"]);
+            }
+            cmd.ExecuteNonQuery();
+            cmd.Dispose();
+            connection.Close();
+
+            return Redirect("/Home/AllData");
+
+        }
     }
 }
