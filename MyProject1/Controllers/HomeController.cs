@@ -61,32 +61,43 @@ namespace MyProject1.Controllers
             cmd.ExecuteNonQuery();
             cmd.Dispose();
             connection.Close();
-
-            return Redirect("/Home/AllData");
+            return Redirect("/");
 
         }
-
-        public RedirectResult EditProcess(int id)
+        public IActionResult EditProcess(int id)
         {
-            //Console.WriteLine(id);
+            Console.WriteLine(id);
             User u = null;
-            DateTime localDate = DateTime.Now;
-            string Edit = "select * from Users where uid = @id";
+            string update = "select * from Users where uid=@id";
             SqlConnection connection = new SqlConnection(conString);
             connection.Open();
-            SqlCommand cmd = new SqlCommand(Edit, connection);
+            SqlCommand cmd = new SqlCommand(update, connection);
             cmd.Parameters.AddWithValue("@id", id);
             SqlDataReader reader = cmd.ExecuteReader();
             while (reader.Read())
             {
                 u = new User((int)reader["uid"], reader["name"].ToString(), reader["email"].ToString(), reader["password"].ToString(), (DateTime)reader["date1"]);
             }
-            cmd.ExecuteNonQuery();
-            cmd.Dispose();
             connection.Close();
+            
+            return View(u);
+        }
 
+        public RedirectResult Update(User u)
+        {
+
+            string update = "update Users set email=@email, name=@name, password=@password where uid = @id";
+            SqlConnection connection = new SqlConnection(conString);
+            connection.Open();
+            SqlCommand cmd = new SqlCommand(update, connection);
+            cmd.Parameters.AddWithValue("@email", u.Email);
+            cmd.Parameters.AddWithValue("@name", u.Username);
+            cmd.Parameters.AddWithValue("@password", u.Password);
+            cmd.Parameters.AddWithValue("@id", u.U_id);
+            int i = cmd.ExecuteNonQuery();
+            Console.WriteLine("Row affected " + u.Username);
+            connection.Close();
             return Redirect("/Home/AllData");
-
         }
     }
 }
