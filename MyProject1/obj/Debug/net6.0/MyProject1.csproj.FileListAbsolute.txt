@@ -31,3 +31,4 @@ C:\Users\swaroop\source\repos\MyProject1\MyProject1\bin\Debug\net6.0\runtimes\wi
 C:\Users\swaroop\source\repos\MyProject1\MyProject1\bin\Debug\net6.0\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
 C:\Users\swaroop\source\repos\MyProject1\MyProject1\bin\Debug\net6.0\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
 C:\Users\swaroop\source\repos\MyProject1\MyProject1\obj\Debug\net6.0\MyProject1.csproj.CopyComplete
+C:\Users\swaroop\source\repos\MyProject1\MyProject1\bin\Debug\net6.0\Newtonsoft.Json.dll
