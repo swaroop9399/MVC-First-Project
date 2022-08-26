@@ -16,8 +16,20 @@ namespace MyProject1.Controllers
 
         public IActionResult AllData()
         {
-            
-            return View ();
+            List<User> users = new List<User>();
+            string select = "select * from Users";
+            SqlConnection connection = new SqlConnection(conString);
+            connection.Open();
+            SqlCommand cmd = new SqlCommand(select, connection);
+            SqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                users.Add(new User((int)reader["uid"], reader["name"].ToString(), reader["email"].ToString(), reader["password"].ToString(), (DateTime)reader["date1"]));
+
+            }
+            cmd.Dispose();
+            connection.Close();
+            return View (users);
         }
 
         [HttpGet]
@@ -40,44 +52,46 @@ namespace MyProject1.Controllers
             
         }
         [HttpPost]
-        public IActionResult Insert(string requestData)
+        public IActionResult Insert(User u)
         {
-            var user = JsonConvert.DeserializeObject<User>(requestData);
-            Console.WriteLine(user.Username);
-            //Console.WriteLine(u);
-            //DateTime localDate = DateTime.Now;
-            //string Insert = "Insert into Users(name, email, password, date1) values(@name, @email, @password, @date1)";
-            //SqlConnection connection = new SqlConnection(conString);
-            //connection.Open();
-            //SqlCommand cmd = new SqlCommand(Insert, connection);
-            //cmd.Parameters.AddWithValue("@name", u.Username);
-            //cmd.Parameters.AddWithValue("@email", u.Email);
-            //cmd.Parameters.AddWithValue("@password", u.Password);
-            //cmd.Parameters.AddWithValue("@date1", localDate);
-            //cmd.ExecuteNonQuery();
-            //cmd.Dispose();
-            //connection.Close();
-
-            return new JsonResult("Working");
+            //var user = JsonConvert.DeserializeObject<User>(requestData);
+            //Console.WriteLine(user.Username);
+            
+            Console.WriteLine(u);
+            DateTime localDate = DateTime.Now;
+            string Insert = "Insert into Users(name, email, password, date1) values(@name, @email, @password, @date1)";
+            SqlConnection connection = new SqlConnection(conString);
+            connection.Open();
+            SqlCommand cmd = new SqlCommand(Insert, connection);
+            cmd.Parameters.AddWithValue("@name", u.Username);
+            cmd.Parameters.AddWithValue("@email", u.Email);
+            cmd.Parameters.AddWithValue("@password", u.Password);
+            cmd.Parameters.AddWithValue("@date1", localDate);
+            cmd.ExecuteNonQuery();
+            cmd.Dispose();
+            connection.Close();
+            
+            return Redirect("/Home/AllData");
 
         }
 
-        public string DeleteProcess(string id)
+        public RedirectResult DeleteProcess(int id)
         {
            
-            int a = int.Parse(JsonConvert.DeserializeObject<int>(id).ToString());
+            //int a = int.Parse(JsonConvert.DeserializeObject<int>(id).ToString());
 
             string Delete = "delete from Users where uid = @id";
             SqlConnection connection = new SqlConnection(conString);
             connection.Open();
             SqlCommand cmd = new SqlCommand(Delete, connection);
-            cmd.Parameters.AddWithValue("@id", a);
+            cmd.Parameters.AddWithValue("@id", id);
             cmd.ExecuteNonQuery();
             cmd.Dispose();
             connection.Close();
-            return ("success");
+            return Redirect("/Home/AllData");
 
         }
+
         public IActionResult EditProcess(int id)
         {
             Console.WriteLine(id);
@@ -97,6 +111,7 @@ namespace MyProject1.Controllers
             return View(u);
         }
 
+        [HttpPost]
         public RedirectResult Update(User u)
         {
 
